@@ -14,10 +14,11 @@ import {
   Marker,
   HtmlInfoWindow,
   PolylineOptions,
-  ILatLng
+  Spherical
 } from '@ionic-native/google-maps';
 import { Platform } from '@ionic/angular';
 import { interval } from 'rxjs';
+
 declare var google;
 
 @Component({
@@ -66,7 +67,11 @@ export class HomePage implements OnDestroy {
     // }));
     // this.driverNearLocation.forEach(value => {
     //   const marker = this.mapDriverMaker.get(value.id);
-    //   this.updateMarker(marker, value.lat, value.lng);
+    //   this.moveMarkerPath(
+    //     marker,
+    //     new LatLng(value.lat, value.lng),
+    //     new LatLng(this.myCurrentLocation.lat, this.myCurrentLocation.lng)
+    //   );
     // });
   }
 
@@ -122,8 +127,12 @@ export class HomePage implements OnDestroy {
   addMarkerDriver(value) {
     let driverLocation = new LatLng(value.lat, value.lng);
     let markerOptionsDriver: MarkerOptions = {
-      position: driverLocation
-      // icon: 'assets/images/icons8-Marker-64.png',
+      position: driverLocation,
+      // icon: {
+      //   size: { width: 37, height: 49 },
+      //   url: 'assets/images/car.png'
+      // },
+      flat: true
     };
 
     this.map.addMarker(markerOptionsDriver).then((marker: Marker) => {
@@ -142,6 +151,14 @@ export class HomePage implements OnDestroy {
 
   removeMarker(marker: Marker) {
     marker.remove();
+  }
+
+  moveMarkerPath(marker: Marker, newLatLgDriver) {
+    const postLocation = marker.getPosition();
+    marker.setPosition(newLatLgDriver);
+    let heading = Spherical.computeHeading(newLatLgDriver, postLocation);
+    heading = heading - 180 ? heading - 180 : heading + 180;
+    marker.setRotation(heading);
   }
 
   testDirector() {
@@ -179,6 +196,53 @@ export class HomePage implements OnDestroy {
           this.directionsDisplay.setDirections(response);
         }
       }
+    );
+  }
+
+  leftDriver() {
+    const headDriver = this.driverNearLocation[1];
+    const marker = this.mapDriverMaker.get(headDriver.id);
+    console.log(headDriver.lat, headDriver.lng + 0.0003);
+    headDriver.lng = headDriver.lng + 0.0003;
+    this.moveMarkerPath(
+      marker,
+      new LatLng(headDriver.lat, headDriver.lng),
+      new LatLng(this.myCurrentLocation.lat, this.myCurrentLocation.lng)
+    );
+  }
+
+  rightDriver() {
+    const headDriver = this.driverNearLocation[1];
+    const marker = this.mapDriverMaker.get(headDriver.id);
+    headDriver.lng = headDriver.lng - 0.0003;
+    console.log(headDriver.lat, headDriver.lng);
+    this.moveMarkerPath(
+      marker,
+      new LatLng(headDriver.lat, headDriver.lng),
+      new LatLng(this.myCurrentLocation.lat, this.myCurrentLocation.lng)
+    );
+  }
+
+  topDriver() {
+    const headDriver = this.driverNearLocation[1];
+    const marker = this.mapDriverMaker.get(headDriver.id);
+    headDriver.lat = headDriver.lat + 0.0003;
+
+    this.moveMarkerPath(
+      marker,
+      new LatLng(headDriver.lat, headDriver.lng),
+      new LatLng(this.myCurrentLocation.lat, this.myCurrentLocation.lng)
+    );
+  }
+  downDriver() {
+    const headDriver = this.driverNearLocation[1];
+    const marker = this.mapDriverMaker.get(headDriver.id);
+    headDriver.lat = headDriver.lat - 0.0003;
+
+    this.moveMarkerPath(
+      marker,
+      new LatLng(headDriver.lat, headDriver.lng),
+      new LatLng(this.myCurrentLocation.lat, this.myCurrentLocation.lng)
     );
   }
 }
