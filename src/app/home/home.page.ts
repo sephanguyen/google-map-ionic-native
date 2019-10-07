@@ -204,11 +204,7 @@ export class HomePage implements OnDestroy {
     const marker = this.mapDriverMaker.get(headDriver.id);
     console.log(headDriver.lat, headDriver.lng + 0.0003);
     headDriver.lng = headDriver.lng + 0.0003;
-    this.moveMarkerPath(
-      marker,
-      new LatLng(headDriver.lat, headDriver.lng),
-      new LatLng(this.myCurrentLocation.lat, this.myCurrentLocation.lng)
-    );
+    this.moveMarkerPath(marker, new LatLng(headDriver.lat, headDriver.lng));
   }
 
   rightDriver() {
@@ -216,11 +212,7 @@ export class HomePage implements OnDestroy {
     const marker = this.mapDriverMaker.get(headDriver.id);
     headDriver.lng = headDriver.lng - 0.0003;
     console.log(headDriver.lat, headDriver.lng);
-    this.moveMarkerPath(
-      marker,
-      new LatLng(headDriver.lat, headDriver.lng),
-      new LatLng(this.myCurrentLocation.lat, this.myCurrentLocation.lng)
-    );
+    this.moveMarkerPath(marker, new LatLng(headDriver.lat, headDriver.lng));
   }
 
   topDriver() {
@@ -228,21 +220,13 @@ export class HomePage implements OnDestroy {
     const marker = this.mapDriverMaker.get(headDriver.id);
     headDriver.lat = headDriver.lat + 0.0003;
 
-    this.moveMarkerPath(
-      marker,
-      new LatLng(headDriver.lat, headDriver.lng),
-      new LatLng(this.myCurrentLocation.lat, this.myCurrentLocation.lng)
-    );
+    this.moveMarkerPath(marker, new LatLng(headDriver.lat, headDriver.lng));
   }
   downDriver() {
     const headDriver = this.driverNearLocation[1];
     const marker = this.mapDriverMaker.get(headDriver.id);
     headDriver.lat = headDriver.lat - 0.0003;
 
-    this.moveMarkerPath(
-      marker,
-      new LatLng(headDriver.lat, headDriver.lng),
-      new LatLng(this.myCurrentLocation.lat, this.myCurrentLocation.lng)
-    );
+    this.moveMarkerPath(marker, new LatLng(headDriver.lat, headDriver.lng));
   }
 }
