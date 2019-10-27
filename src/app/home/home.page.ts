@@ -110,6 +110,29 @@ export class HomePage implements OnDestroy {
           htmlInfoWindow.open(marker);
         });
       });
+
+      this.map
+        .addMarker({
+          icon: 'blue',
+          animation: 'DROP',
+          draggable: true,
+          position: coordinatesMyCurrent
+        })
+        .then((marker: Marker) => {
+          marker.on(GoogleMapsEvent.MARKER_DRAG_END).subscribe(() => {
+            console.log(marker.getPosition());
+
+            // localStorage.setItem('latt1', this.markerlatlong.lat);
+            // localStorage.setItem('long1', this.markerlatlong.lng);
+
+            // this.http
+            //   .get('API URL')
+            //   .map(res => res.json())
+            //   .subscribe(data => {
+            //     console.log(data);
+            //   });
+          });
+        });
     });
   }
 
